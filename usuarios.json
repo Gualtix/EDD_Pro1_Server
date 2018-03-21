@@ -1,0 +1,26 @@
+[
+	{
+		"nombre":"Esvin González",
+		"correo":"eesvux@gmail.com",
+		"nickname":"esvux",
+		"clave":"62c8ad0a15d9d1ca38d5dee762a16e01"
+	},
+	{
+		"nombre":"Sarina Bolaños",
+		"correo":"aniras.s20s@gmail.com",
+		"nickname":"aniras",
+		"clave":"62c8ad0a15d9d1ca38d5dee762a16e01"
+	},
+	{
+		"nombre":"Pedro López",
+		"correo":"pedron@gmail.com",
+		"nickname":"pedro",
+		"clave":"62c8ad0a15d9d1ca38d5dee762a16e01"
+	},
+	{
+		"nombre":"Gabriel Galicia",
+		"correo":"gabigali@gmail.com",
+		"nickname":"gabi",
+		"clave":"62c8ad0a15d9d1ca38d5dee762a16e01"
+	}
+]

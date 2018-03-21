@@ -1,0 +1,84 @@
+[
+	{
+		"nombre": "Tarea1",
+		"tipo": "documento",
+		"creador": "esvin",
+		"fecha_creacion": "2018-02-23",
+		"modificador": "aniras",
+		"fecha_modificacion": "2018-02-28",
+		"ruta_contenido": "/carpeta/al/archivo/Tarea1.presentacion.json",
+		"permisos": [
+			{
+				"usuario": "aniras",
+				"permiso": "editar"
+			},
+			{
+				"usuario": "pedro",
+				"permiso": "editar"
+			}
+		]
+	},
+	{
+		"nombre": "ExpoIT2",
+		"tipo": "presentacion",
+		"creador": "aniras",
+		"fecha_creacion": "2018-03-03",
+		"modificador": "aniras",
+		"fecha_modificacion": "2018-03-10",
+		"ruta_contenido": "/carpeta/al/archivo/ExpoIT2.documento.json",
+		"permisos": [
+			{
+				"usuario": "esvux",
+				"permiso": "editar"
+			},
+			{
+				"usuario": "pedro",
+				"permiso": "ver"
+			}
+		]
+	},
+	{
+		"nombre": "HT1_EDD",
+		"tipo": "documento",
+		"creador": "esvin",
+		"fecha_creacion": "2018-03-10",
+		"modificador": "aniras",
+		"fecha_modificacion": "2018-03-11",
+		"ruta_contenido": "/carpeta/al/archivo/HT1_EDD.documento.json",
+		"permisos": [
+			{
+				"usuario": "aniras",
+				"permiso": "editar"
+			}
+		]
+	},
+	{
+		"nombre": "MarioBros",
+		"tipo": "lienzo",
+		"creador": "gabi",
+		"fecha_creacion": "2018-03-12",
+		"modificador": "gabi",
+		"fecha_modificacion": "2018-03-12",
+		"ruta_contenido": "/carpeta/al/archivo/MarioBros.lienzo.json",
+		"permisos": [
+			{
+				"usuario": "aniras",
+				"permiso": "ver"
+			},
+			{
+				"usuario": "esvux",
+				"permiso": "ver"
+			}
+		]
+	},
+	{
+		"nombre": "ExpoEDD",
+		"tipo": "presentacion",
+		"creador": "pedro",
+		"fecha_creacion": "2018-03-14",
+		"modificador": "pedro",
+		"fecha_modificacion": "2018-03-15",
+		"ruta_contenido": "/carpeta/al/archivo/ExpoEDD.presentacion.json",
+		"permisos": []
+	}
+]
