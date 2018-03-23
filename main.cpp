@@ -17,15 +17,15 @@ int main(int argc, char *argv[])
     //GenList<QString>* GL = new GenList<QString>();
         SparseMatrix* Mtx = new SparseMatrix();
 
-        Mtx->Load_JSon_Vertical_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json");
-        Mtx->Load_JSon_Horizontal_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json");
+        //Mtx->Load_JSon_Vertical_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json");
+        //Mtx->Load_JSon_Horizontal_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json");
 
         //GeNode<User*>* Us = Mtx->LstVertical->GetNode_By_String("Gabriel Galicia");
         //GeNode<Archive*>* Ar2 = Mtx->LstHorizontal->GetNode_By_String("MarioBros");
         //GeNode<Archive*>* Ar3 = Mtx->LstHorizontal->GetNode_By_String("Tarea1");
 
 
-        Mtx->DrawMatrix();
+        //Mtx->DrawMatrix();
 
 
         /*  "/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json" */
@@ -88,15 +88,15 @@ int main(int argc, char *argv[])
 
         */
 
-        int Yz;
+        //int Yz;
         //Mtx->H_Insert(new Alumno(0,35.6,"Alejandro"));
         //Mtx->V_Insert(new Curso(0,10.5,"Aplicada 2"));
 
-        int Ps = 0;
+        //int Ps = 0;
 
     QApplication a(argc, argv);
     MainWindow w;
-    //w.show();
+    w.show();
 
     return a.exec();
 }

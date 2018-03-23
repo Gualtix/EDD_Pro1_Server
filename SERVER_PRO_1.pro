@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+QT += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,7 +26,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    localserver.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,7 +39,12 @@ HEADERS += \
     genode.h \
     genlist.h \
     archive.h \
-    abs_data.h
+    abs_data.h \
+    localserver.h
 
 FORMS += \
         mainwindow.ui
+
+QMAKE_CXXFLAGS += -std=gnu++11
+
+

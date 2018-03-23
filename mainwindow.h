@@ -12,7 +12,7 @@
 #include "jsonreader.h"
 
 
-
+class LocalServer;
 
 namespace Ui {
 class MainWindow;
@@ -26,8 +26,18 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_iniciar_clicked();
+
+    void on_enviar_clicked();
+
+    void on_quitar_clicked();
+
+
+
 private:
     Ui::MainWindow *ui;
+    LocalServer* mLocalServer;
 };
 
 #endif // MAINWINDOW_H

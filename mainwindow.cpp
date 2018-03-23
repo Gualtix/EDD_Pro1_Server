@@ -1,41 +1,37 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-
-
+#include "localserver.h"
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow){
-
-
-    /*
-
-    QString fileName = QFileDialog::getOpenFileName(NULL, tr("JSON PRODUCTOS"));
-    //QString fileName = QFileDialog::getOp
-        if(fileName.isEmpty())
-            return;
-
-        QFile file(fileName);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            return;
-        QByteArray ba = file.readAll();
-
-        //JSonReader::Load_Files(ba);
-
-        /*  "/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json" */
-        /*  "/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json" */
-
-
-
-
-
-
         ui->setupUi(this);
+        mLocalServer = new LocalServer(this);
     }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
     delete ui;
 }
+
+void MainWindow::on_iniciar_clicked(){
+    //Local ---> if(!mLocalServer->listen("Shared_Files_Server")){
+    if(!mLocalServer->listen(QHostAddress::AnyIPv4,4328)){
+        QMessageBox::critical(this,"Error",mLocalServer->errorString());
+    }
+    else{
+        QMessageBox::information(this,"Servidor","Iniciado...");
+    }
+
+}
+
+void MainWindow::on_enviar_clicked(){
+    mLocalServer->envia(ui->msj->text());
+}
+
+void MainWindow::on_quitar_clicked(){
+    close();
+}
+
+
