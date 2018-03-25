@@ -24,27 +24,33 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    localserver.cpp
-
-HEADERS += \
-        mainwindow.h \
-    user.h \
-    sparsematrix.h \
-    permission.h \
-    myint.h \
-    jsonreader.h \
-    genode.h \
-    genlist.h \
-    archive.h \
-    abs_data.h \
-    localserver.h
-
 FORMS += \
         mainwindow.ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
+
+SUBDIRS += \
+    SERVER_PRO_1.pro
+
+HEADERS += \
+    abs_data.h \
+    archive.h \
+    decoder.h \
+    genlist.h \
+    genode.h \
+    jsonreader.h \
+    mainwindow.h \
+    myint.h \
+    mystring.h \
+    permission.h \
+    sparsematrix.h \
+    static_storage.h \
+    tcp_server.h \
+    user.h
+
+SOURCES += \
+    main.cpp \
+    mainwindow.cpp \
+    tcp_server.cpp
 
 

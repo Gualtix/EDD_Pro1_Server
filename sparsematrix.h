@@ -91,6 +91,14 @@ public:
 
     }
 
+    GeNode<Archive*>* Get_J_Archive_Header_Node_By_String(QString Arch){
+        return this->LstHorizontal->GetNode_By_String(Arch);
+    }
+
+    GeNode<User*>* Get_I_User_Header_Node_By_String(QString Usr){
+        return this->LstVertical->GetNode_By_Nickname(Usr);
+    }
+
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
     //(^< ............ ............ ............ ............ ............ JSon
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............

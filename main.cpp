@@ -1,14 +1,18 @@
 //C++
+#include <iostream>
 
 //Qt
 #include <QApplication>
 #include "QString"
+#include "QDebug"
 
 //ADT
 #include "mainwindow.h"
 #include "sparsematrix.h"
 #include "user.h"
 #include "archive.h"
+
+using namespace std;
 
 int main(int argc, char *argv[])
 
@@ -93,6 +97,12 @@ int main(int argc, char *argv[])
         //Mtx->V_Insert(new Curso(0,10.5,"Aplicada 2"));
 
         //int Ps = 0;
+
+        QString msg = "NewUser#Walter#7487#Waltix@hotmail.com#Morales#";
+
+
+
+        //cout << " is divisible by"  << endl;
 
     QApplication a(argc, argv);
     MainWindow w;

@@ -4,15 +4,17 @@
 //C++
 
 //Qt
-#include <QMainWindow>
 #include <QFile>
 #include <QFileDialog>
+#include <QMainWindow>
 
 //ADT
 #include "jsonreader.h"
+#include "sparsematrix.h"
 
 
-class LocalServer;
+
+class Tcp_Server;
 
 namespace Ui {
 class MainWindow;
@@ -27,17 +29,44 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_iniciar_clicked();
+    void socketReceive();
 
-    void on_enviar_clicked();
+    void Star_Server();
 
-    void on_quitar_clicked();
+    void Stop_Server();
 
+    void Star_Listening();
 
+    void SendMessage(QString msg);
+
+    void on_btnServer_Start_clicked();
+
+    void on_btnServer_Stop_clicked();
+
+    void on_btnMatrix_Graph_clicked();
+
+    void Load_Mattix();
+
+    void Graph_Matrix();
+
+    void on_btnLisent_to_Client_clicked();
+
+    void Original();
+
+    void Iniciado();
+
+    void Apagado();
+
+    void Escuchando();
+
+    void UpDate_Req(QString Req);
 
 private:
     Ui::MainWindow *ui;
-    LocalServer* mLocalServer;
+
+    SparseMatrix* Mtx;
+    Tcp_Server* mServer;
+    //Decoder* decoTools;
 };
 
 #endif // MAINWINDOW_H
