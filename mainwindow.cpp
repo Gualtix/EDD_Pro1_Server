@@ -23,8 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     Original();
 
-
-
+    on_btnServer_Start_clicked();
     //Star_Server();
     //Load_Mattix();
 
@@ -70,7 +69,7 @@ void MainWindow::Star_Server(){
         else{
             Iniciado();
             Load_Mattix();
-            QMessageBox::information(this,"Servidor","Server has Started");
+            //QMessageBox::information(this,"Servidor","Server has Started");
         }
     }
     else{
@@ -152,6 +151,8 @@ void MainWindow::UpDate_Req(QString Req){
     if(Req == "Log_In"){
         ui->lblLastReq->setText("Log_In");
         ui->lblNickname->setText(Static_Storage::Nickname);
+
+        mServer = new Tcp_Server(this);
     }
     else if(Req == "Sign_In"){
         ui->lblLastReq->setText("Sign_In");

@@ -15,12 +15,13 @@
 //(^< ............ ............ ............ Constructor: Set
 Tcp_Server::Tcp_Server(QObject *parent) : QTcpServer(parent){
 
-    parent = nullptr;
+    //parent = nullptr;
     Tcp_Socket_Client = nullptr;
     connect(this, &Tcp_Server::newConnection, [&](){
         Tcp_Socket_Client = nextPendingConnection();
         if(Tcp_Socket_Client){
             //startListening();
+            int a = 10;
         }
     });
 }

@@ -20,9 +20,14 @@ public:
 
     GenList<MyString*>* WList;
 
+    //(^< ............ ............ ............ Constructor: Default
     Decoder(){
         WList = new GenList<MyString*>();
     }
+
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+    //(^< ............ ............ ............ ............ ............ Tools
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 
     void GetStack_of_Instructions(QString msg){
 
@@ -62,7 +67,7 @@ public:
                 return "Sign_In#ERROR#Password dont Match with Nickname, Please Try Again...#";
             }
             else if(Req == "Get_User_Files"){
-
+                return Get_User_Files(Mtx);
             }
             else if(Req == "Get_File_Content"){
 
@@ -84,6 +89,76 @@ public:
         return "ERROR#Peticion No Aceptada#";
     }
 
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+    //(^< ............ ............ ............ ............ ............ APP
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+
+    QString Get_User_Files(SparseMatrix* Mtx){
+
+        QString Answer = "Get_User_Files";
+        Answer.append("#");
+
+        GeNode<User*>* Us = Mtx->Get_I_User_Header_Node_By_String(Static_Storage::Nickname);
+        GenList<Permission*>* NL = Us->Data->NuclearList;
+
+        Answer.append(QString::number(NL->ListSize));
+        Answer.append("#");
+
+        if(NL->ListSize > 0){
+
+            //GenList<Archive*>* ArList = new GenList<Archive*>();
+            //GenList<MyString*>* PermList = new GenList<MyString*>();
+
+            int cnt = 0;
+            GeNode<Permission*>* Tmp = NL->First;
+            while(cnt < NL->ListSize){
+
+                Archive* ArInfo = Mtx->Get_J_Archive_Header_Node_By_String(Tmp->Data->PermissionData->ARCH)->Data;
+                QString Permiso = Tmp->Data->PermissionData->Type;
+
+                Answer.append(Permiso);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Name);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Type);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Creator);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Creation_Date);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Creation_Date);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Modifier_Nickname);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->Modification_Date);
+                Answer.append("#");
+
+                Answer.append(ArInfo->ArchiveData->JSon_URL);
+                Answer.append("#");
+
+                Answer.append("^");
+                Answer.append("#");
+
+                Tmp = Tmp->Next;
+                cnt++;
+            }
+        }
+
+        return Answer;
+    }
+
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+    //(^< ............ ............ ............ ............ ............ Login
+    //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+
+
     bool Log_In(SparseMatrix* Mtx){
 
         QString Nick = WList->GetNode(1)->Data->Cad;
@@ -97,7 +172,6 @@ public:
         }
 
         return false;
-
     }
 
     bool Sign_In(SparseMatrix* Mtx){
