@@ -103,6 +103,7 @@ public:
                 PermissionInfo* TmpInfo = new PermissionInfo();
                 TmpInfo->ARCH = nameValue.toString();
                 TmpInfo->USR = usuarioValue.toString();
+                TmpInfo->Type = permisoValue.toString();
                 TmpInfo->TAG = permisoValue.toString();
 
                 LsPermInfo->EndInsert(TmpInfo);

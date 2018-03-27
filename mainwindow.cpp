@@ -1,33 +1,42 @@
 //C++
 
 //Qt
-#include <QTcpSocket>
 #include <QMessageBox>
+#include <QDateTime>
+#include <QDebug>
 
 //ADT
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tcp_server.h"
 #include "decoder.h"
 #include "static_storage.h"
 
+
 //Static Storage Definition
-QString Static_Storage::Nickname = "<font color='red'>Nobody Logged</font>";
+QString Static_Storage::Nickname = "Nobody Logged";
+QString Static_Storage::Repy_Status = "None";
 
 //(^< ............ ............ ............ Constructor: Set
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
+    //(^< ............ T A B L E
+    ui->tblRequest_History->setColumnWidth(1,140);
+    ui->tblRequest_History->setColumnWidth(2,250);
+    ui->tblRequest_History->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     Mtx = new SparseMatrix();
-    mServer = new Tcp_Server(this);
+
+    //(^< ............ S E R V E R
+    mServer = new QTcpServer(this);
+    mServer->setMaxPendingConnections(2);
+
+    //(^< ............ C L I E N T
+    mClient = new QTcpSocket(this);
 
     Original();
 
     on_btnServer_Start_clicked();
-    //Star_Server();
-    //Load_Mattix();
-
-
 }
 
 //(^< ............ ............ ............ Destructor
@@ -51,31 +60,29 @@ void MainWindow::on_btnMatrix_Graph_clicked(){
     Graph_Matrix();
 }
 
-void MainWindow::on_btnLisent_to_Client_clicked()
-{
-    Star_Listening();
-}
-
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 //(^< ............ ............ ............ ............ ............ Server Management
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 
+
+void MainWindow::Nw_Connection(){
+    ui->lblListening->setText("<font color='green'>Connection Established...</font>");
+    mClient = mServer->nextPendingConnection();
+    connect(mClient,SIGNAL (readyRead()),this,SLOT (socketReceive()));
+}
+
+
 void MainWindow::Star_Server(){
-    if(mServer->Tcp_Socket_Client == nullptr){
-        if(!mServer->listen(QHostAddress::AnyIPv4,4328)){
-            QMessageBox::critical(this,"Error",mServer->errorString());
-            return;
-        }
-        else{
-            Iniciado();
-            Load_Mattix();
-            //QMessageBox::information(this,"Servidor","Server has Started");
-        }
+
+
+    if (!mServer->listen(QHostAddress::Any, 4328)){
+        QMessageBox::critical(this,"Error",mServer->errorString());
     }
     else{
+        connect(mServer,SIGNAL(newConnection()),this,SLOT(Nw_Connection()));
         Iniciado();
-        ui->btnLisent_to_Client->setEnabled(false);
-        QMessageBox::information(this,"Servidor","Server has Started");
+        Load_Mattix();
+        //QMessageBox::information(this,"Servidor","Server has Started");
     }
 }
 
@@ -83,17 +90,6 @@ void MainWindow::Stop_Server(){
     Apagado();
     QMessageBox::critical(this,"Error","Server has Stopped");
     //close();
-}
-
-void MainWindow::Star_Listening(){
-
-    if(mServer->Tcp_Socket_Client != nullptr){
-        connect(mServer->Tcp_Socket_Client,SIGNAL (readyRead()),this,SLOT (socketReceive()));
-        Escuchando();
-    }
-    else{
-        QMessageBox::critical(this,"Error","Client APP has not Started");
-    }
 }
 
 
@@ -104,10 +100,13 @@ void MainWindow::Star_Listening(){
 void MainWindow::socketReceive(){
 
     QByteArray Bf;
-    Bf.resize(mServer->Tcp_Socket_Client->bytesAvailable());
-    mServer->Tcp_Socket_Client->read(Bf.data(),Bf.size());
+    Bf.resize(mClient->bytesAvailable());
+    mClient->read(Bf.data(),Bf.size());
 
     QString msg = (QString (Bf));
+
+    ui->tboxRequest->setText("");
+    ui->tboxRequest->setText(msg);
 
     Decoder* decoTools = new Decoder();
 
@@ -121,7 +120,15 @@ void MainWindow::socketReceive(){
 }
 
 void MainWindow::SendMessage(QString msg){
-    mServer->socketSend(msg);
+
+    ui->tboxReply->setText("");
+    ui->tboxReply->setText(msg);
+
+    if(mClient){
+        QTextStream T(mClient);
+        T << msg;
+        mClient->flush();
+    }
 }
 
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
@@ -148,17 +155,34 @@ void MainWindow::Graph_Matrix(){
 
 void MainWindow::UpDate_Req(QString Req){
 
+    QTime Tm = QTime::currentTime();
+
+    AddTableItem(0,Static_Storage::Nickname,Req,Static_Storage::Repy_Status,Tm.toString());
+
     if(Req == "Log_In"){
         ui->lblLastReq->setText("Log_In");
         ui->lblNickname->setText(Static_Storage::Nickname);
 
-        mServer = new Tcp_Server(this);
     }
     else if(Req == "Sign_In"){
         ui->lblLastReq->setText("Sign_In");
         ui->lblNickname->setText("<font color='red'>Nobody Logged</font>");
     }
-
+    else if(Req == "Get_User_Files"){
+        ui->lblLastReq->setText("Get_User_Files");
+    }
+    else if(Req == "Create_File"){
+        ui->lblLastReq->setText("Create_File");
+    }
+    else if(Req == "Block_File"){
+        ui->lblLastReq->setText("Block_File");
+    }
+    else if(Req == "Release_File"){
+        ui->lblLastReq->setText("Release_File");
+    }
+    else if(Req == "Save_File"){
+        ui->lblLastReq->setText("Save_File");
+    }
 }
 
 void MainWindow::Original(){
@@ -178,41 +202,42 @@ void MainWindow::Original(){
 
 void MainWindow::Iniciado(){
     ui->btnServer_Start->setEnabled(false);
-    ui->btnServer_Stop->setEnabled(false);
+    ui->btnServer_Stop->setEnabled(true);
     ui->btnMatrix_Graph->setEnabled(true);
-    ui->btnLisent_to_Client->setEnabled(true);
+    //ui->btnLisent_to_Client->setEnabled(true);
 
     ui->lblStatus->setText("<font color='green'>ON</font>");
+    ui->lblListening->setText("<font color='blue'>Listening...</font>");
 }
 
-void MainWindow::Escuchando(){
-    ui->lblListening->setText("<font color='green'>Listenig</font>");
-    ui->btnServer_Stop->setEnabled(true);
-    ui->btnLisent_to_Client->setEnabled(false);
-}
 
 void MainWindow::Apagado(){
 
     ui->btnServer_Start->setEnabled(true);
     ui->btnServer_Stop->setEnabled(false);
     ui->btnMatrix_Graph->setEnabled(true);
-    ui->btnLisent_to_Client->setEnabled(false);
+    //ui->btnLisent_to_Client->setEnabled(false);
 
     ui->lblStatus->setText("<font color='red'>OFF</font>");
+    ui->lblListening->setText("<font color='red'>No Listening</font>");
 }
 
 
+//(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+//(^< ............ ............ ............ ............ ............ Actions
+//(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 
 
+void MainWindow::AddTableItem(int Rk,QString Usuario,QString Solicitud,QString Respuesta,QString Tiempo){
 
+    ui->tblRequest_History->insertRow(Rk);
 
+    ui->tblRequest_History->setItem(Rk,0,new QTableWidgetItem(Usuario));
+    ui->tblRequest_History->setItem(Rk,1,new QTableWidgetItem(Solicitud));
+    ui->tblRequest_History->setItem(Rk,2,new QTableWidgetItem(Respuesta));
+    ui->tblRequest_History->setItem(Rk,3,new QTableWidgetItem(Tiempo));
 
-
-
-
-
-
-
+}
 
 
 

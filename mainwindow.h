@@ -7,14 +7,13 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QTcpServer>
+#include <QTcpSocket>
 
 //ADT
 #include "jsonreader.h"
 #include "sparsematrix.h"
 
-
-
-class Tcp_Server;
 
 namespace Ui {
 class MainWindow;
@@ -29,13 +28,14 @@ public:
     ~MainWindow();
 
 private slots:
+
+    void Nw_Connection();
+
     void socketReceive();
 
     void Star_Server();
 
     void Stop_Server();
-
-    void Star_Listening();
 
     void SendMessage(QString msg);
 
@@ -49,24 +49,22 @@ private slots:
 
     void Graph_Matrix();
 
-    void on_btnLisent_to_Client_clicked();
-
     void Original();
 
     void Iniciado();
 
     void Apagado();
 
-    void Escuchando();
-
     void UpDate_Req(QString Req);
+
+    void AddTableItem(int Rk,QString Usuario,QString Solicitud,QString Respuesta,QString Tiempo);
 
 private:
     Ui::MainWindow *ui;
 
     SparseMatrix* Mtx;
-    Tcp_Server* mServer;
-    //Decoder* decoTools;
+    QTcpServer* mServer;
+    QTcpSocket* mClient;
 };
 
 #endif // MAINWINDOW_H

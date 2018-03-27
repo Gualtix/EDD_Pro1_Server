@@ -12,6 +12,7 @@ class Static_Storage{
 public:
 
     static QString Nickname;
+    static QString Repy_Status;
 
 };
 

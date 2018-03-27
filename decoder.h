@@ -19,6 +19,7 @@ class Decoder{
 public:
 
     GenList<MyString*>* WList;
+    int Num_Files = -1;
 
     //(^< ............ ............ ............ Constructor: Default
     Decoder(){
@@ -56,18 +57,25 @@ public:
             QString Req = WList->First->Data->Cad;
             if(Req == "Log_In"){
                 if(Log_In(Mtx)){
+                    Static_Storage::Repy_Status = "SUCCESS";
                     return "Log_In#SUCCESS#New User Successfully Registered#";
                 }
+                Static_Storage::Repy_Status = "FAIL";
                 return "Log_In#ERROR#New User Nickname is Already in Use, Please Try Again...#";
             }
             else if(Req == "Sign_In"){
                 if(Sign_In(Mtx)){
+                    Static_Storage::Repy_Status = "SUCCESS";
                     return "Sign_In#SUCCESS#Welcome to Shared Files Management#";
                 }
+                Static_Storage::Repy_Status = "FAIL";
                 return "Sign_In#ERROR#Password dont Match with Nickname, Please Try Again...#";
             }
             else if(Req == "Get_User_Files"){
-                return Get_User_Files(Mtx);
+
+                QString Ans = Get_User_Files(Mtx);
+                Static_Storage::Repy_Status = QString::number(Num_Files)+" File(s) were sent";
+                return Ans;
             }
             else if(Req == "Get_File_Content"){
 
@@ -103,6 +111,8 @@ public:
 
         Answer.append(QString::number(NL->ListSize));
         Answer.append("#");
+
+        Num_Files = NL->ListSize;
 
         if(NL->ListSize > 0){
 
@@ -141,9 +151,6 @@ public:
                 Answer.append("#");
 
                 Answer.append(ArInfo->ArchiveData->JSon_URL);
-                Answer.append("#");
-
-                Answer.append("^");
                 Answer.append("#");
 
                 Tmp = Tmp->Next;
