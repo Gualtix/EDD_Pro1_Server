@@ -13,6 +13,7 @@ public:
 
     static QString Nickname;
     static QString Repy_Status;
+    static QString JSon_URL;
 
 };
 

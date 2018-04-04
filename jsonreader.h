@@ -126,6 +126,7 @@ public:
 
             LstHorizontal->EndInsert(ARCH);
             LstHorizontal->Last->TAG = nameValue.toString();
+            LstHorizontal->Last->NICK = nameValue.toString();
             LstHorizontal->Last->Data->HrPos = A;
         }
     }
@@ -187,6 +188,17 @@ public:
             LstVertical->Last->Data->VrPos = i;
         }
     }
+
+    //(^< ............ ............ ............ Actualizacion de Usuarios
+    //QString static User_Update(){
+
+    //}
+
+    //(^< ............ ............ ............ Actualizacion de Archivos
+    //QString static User_Update(){
+
+    //}
+
 };
 
 #endif // JSONREADER_H

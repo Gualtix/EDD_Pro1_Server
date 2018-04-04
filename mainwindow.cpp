@@ -15,6 +15,7 @@
 //Static Storage Definition
 QString Static_Storage::Nickname = "Nobody Logged";
 QString Static_Storage::Repy_Status = "None";
+QString Static_Storage::JSon_URL = "";
 
 //(^< ............ ............ ............ Constructor: Set
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -136,8 +137,14 @@ void MainWindow::SendMessage(QString msg){
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 
 void MainWindow::Load_Mattix(){
-    Mtx->Load_JSon_Vertical_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json");
-    Mtx->Load_JSon_Horizontal_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json");
+
+
+    //Mtx->Load_JSon_Vertical_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json");
+    //Mtx->Load_JSon_Horizontal_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json");
+
+
+    Mtx->Load_JSon_Vertical_Headers("US_DIR/usuarios.json");
+    Mtx->Load_JSon_Horizontal_Headers("ARCH_DIR/archivos.json");
 }
 
 void MainWindow::Graph_Matrix(){

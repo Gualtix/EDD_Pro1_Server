@@ -3,9 +3,11 @@
 
 #include "QString"
 
+
 class GraphInfo{
 
 public:
+
     QString TAG     = "";
     QString NODE_ID = "";
 

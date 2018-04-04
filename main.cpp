@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 {
 
     //GenList<QString>* GL = new GenList<QString>();
-        SparseMatrix* Mtx = new SparseMatrix();
+        //SparseMatrix* Mtx = new SparseMatrix();
 
         //Mtx->Load_JSon_Vertical_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/usuarios.json");
         //Mtx->Load_JSon_Horizontal_Headers("/home/wrm/SERVER_PRO_1/SERVER_PRO_1/archivos.json");
@@ -98,11 +98,47 @@ int main(int argc, char *argv[])
 
         //int Ps = 0;
 
-        QString msg = "NewUser#Walter#7487#Waltix@hotmail.com#Morales#";
+       // QString msg = "NewUser#Walter#7487#Waltix@hotmail.com#Morales#";
 
 
 
-        //cout << " is divisible by"  << endl;
+
+    /*
+    //(^< ............ User Load
+    QString Input_JSon_URL = "US_DIR/usuarios.json";
+    QFile MyFile(Input_JSon_URL);
+    MyFile.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QTextStream out(&MyFile);
+    QString JSon_Plain_String = out.readAll();
+
+    MyFile.close();
+
+    //(^< ............ Edit
+    int Last_Char_Pos = JSon_Plain_String.size() - 1;
+    JSon_Plain_String.remove(Last_Char_Pos-1,2);
+
+    JSon_Plain_String.append(",\n");
+    JSon_Plain_String.append("\t{\n");
+
+    JSon_Plain_String.append("\t\t       \"nombre\":\"Walter Morales\"        ,\n");
+    JSon_Plain_String.append("\t\t       \"correo\":\"waltix@gmail.com\"        ,\n");
+    JSon_Plain_String.append("\t\t       \"nickname\":\"waltix\"        ,\n");
+    JSon_Plain_String.append("\t\t       \"clave\":\"felicidad\"        \n");
+
+    JSon_Plain_String.append("\t}\n");
+    JSon_Plain_String.append("]");
+
+    //(^< ............ User Update
+    QString Output_JSon_URL = "US_DIR/usuarios.json";
+    QFile Fl(Output_JSon_URL);
+    if (Fl.open(QFile::WriteOnly)) {
+        QTextStream stream(&Fl);
+        stream << JSon_Plain_String << endl;
+        Fl.close();
+    }
+    */
+
 
     QApplication a(argc, argv);
     MainWindow w;

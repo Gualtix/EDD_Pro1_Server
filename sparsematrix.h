@@ -84,11 +84,14 @@ public:
         GeNode<Archive*>* ND_AR = this->LstHorizontal->GetNode_By_String(Arch);
         GeNode<User*>* ND_US = this->LstVertical->GetNode_By_Nickname(Usr);
 
-        int j = ND_AR->CORREL;
-        int i = ND_US->CORREL;
+        if(ND_AR != NULL && ND_US != NULL){
+            int j = ND_AR->CORREL;
+            int i = ND_US->CORREL;
 
-        return Get_J_I_Node(j,i);
+            return Get_J_I_Node(j,i);
+        }
 
+        return NULL;
     }
 
     GeNode<Archive*>* Get_J_Archive_Header_Node_By_String(QString Arch){
@@ -100,7 +103,7 @@ public:
     }
 
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
-    //(^< ............ ............ ............ ............ ............ JSon
+    //(^< ............ ............ ............ ............ ............ JSon-Handle
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 
     //(^< ............ ............ ............ Cargar Encabezado Horizontal: Archivos
@@ -152,6 +155,63 @@ public:
 
         JSonReader::Load_Vertical_Users(BA,LstVertical);
     }
+
+    //(^< ............ ............ ............ Actualizar JSon-Archives
+
+    //(^< ............ ............ ............ Actualizar JSon-Users
+    void Update_JSon_Users(User* NewUser){
+
+        //(^< ............ User Load
+        QString Input_JSon_URL = "US_DIR/usuarios.json";
+
+        QFile MyFile(Input_JSon_URL);
+        MyFile.open(QIODevice::ReadOnly | QIODevice::Text);
+
+        QTextStream out(&MyFile);
+        QString JSon_Plain_String = out.readAll();
+
+        MyFile.close();
+
+        //(^< ............ Adjustment
+        QString Ls = JSon_Plain_String.right(1);
+        if(Ls == "\n"){
+            //JSon_Plain_String.remove(JSon_Plain_String.size() - 1,1);
+            JSon_Plain_String.chop(1);
+        }
+
+        //(^< ............ Edit
+        //int Last_Char_Pos = JSon_Plain_String.size() - 1;
+        //JSon_Plain_String.remove(Last_Char_Pos-1,2);
+        JSon_Plain_String.chop(1);
+        JSon_Plain_String.chop(1);
+
+        JSon_Plain_String.append(",\n");
+        JSon_Plain_String.append("\t{\n");
+
+        JSon_Plain_String.append("\t\t\"nombre\":\""+NewUser->UserData->Name+"\",\n");
+        JSon_Plain_String.append("\t\t\"correo\":\""+NewUser->UserData->EMail+"\",\n");
+        JSon_Plain_String.append("\t\t\"nickname\":\""+NewUser->UserData->Nickname+"\",\n");
+        JSon_Plain_String.append("\t\t\"clave\":\""+NewUser->UserData->Password+"\"\n");
+
+        JSon_Plain_String.append("\t}\n");
+        JSon_Plain_String.append("]");
+
+        //(^< ............ User Update
+        QString Output_JSon_URL = "US_DIR/usuarios.json";
+        QFile Fl(Output_JSon_URL);
+        if (Fl.open(QFile::WriteOnly)) {
+            QTextStream stream(&Fl);
+            stream << JSon_Plain_String << endl;
+            Fl.close();
+        }
+    }
+
+    //(^< ............ ............ ............ Actualizar JSon-Document
+
+    //(^< ............ ............ ............ Actualizar JSon-Canvas
+
+    //(^< ............ ............ ............ Actualizar JSon-Presentation
+
 
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
     //(^< ............ ............ ............ ............ ............ Ordering
@@ -675,6 +735,7 @@ public:
                     //Bf.append("    "+TmpPer->Data->PermissionData->NODE_ID+" ->"+TmpPer->Data->Top->PermissionData->NODE_ID+";\n");
                     Bf.append("    "+TmpPer->Data->PermissionData->NODE_ID+" ->"+TmpPer->Data->Top->PermissionData->NODE_ID+";\n");
                     Bf.append("    "+TmpPer->Data->Top->PermissionData->NODE_ID+" ->"+TmpPer->Data->PermissionData->NODE_ID+";\n");
+
                 }
 
                 //Next
@@ -791,6 +852,7 @@ public:
             cnt++;
         }
     }
+
 };
 
 #endif // SPARSEMATRIX_H
