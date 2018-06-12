@@ -80,8 +80,6 @@ public:
             QJsonArray Permisos = Obj["permisos"].toArray();
             int maxPermisos = Permisos.size();
 
-
-
             for(int j = 0; j < maxPermisos; j++){
 
                 QJsonValueRef rePerm = Permisos[j];
@@ -108,6 +106,18 @@ public:
 
                 LsPermInfo->EndInsert(TmpInfo);
             }
+
+
+            /* ------------ D U E N I O ------------ */
+            PermissionInfo* Dn = new PermissionInfo();
+            Dn->ARCH = nameValue.toString();
+            //Dn->USR = usuarioValue.toString();
+            Dn->USR = creatorValue.toString();
+            Dn->Type = "dueño";
+            Dn->TAG = "dueño";
+
+            LsPermInfo->EndInsert(Dn);
+
 
             ArchiveInfo* ArInfo = new ArchiveInfo();
 

@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //(^< ............ S E R V E R
     mServer = new QTcpServer(this);
-    mServer->setMaxPendingConnections(2);
+    mServer->setMaxPendingConnections(10);
 
     //(^< ............ C L I E N T
     mClient = new QTcpSocket(this);
@@ -89,7 +89,24 @@ void MainWindow::Star_Server(){
 
 void MainWindow::Stop_Server(){
     Apagado();
-    QMessageBox::critical(this,"Error","Server has Stopped");
+    Mtx->Update_JSonArchives();
+
+    //(^< ............ S E R V E R
+    mServer->close();
+    mServer->disconnect();
+    mServer = NULL;
+    mServer = new QTcpServer(this);
+    mServer->setMaxPendingConnections(10);
+
+    //(^< ............ C L I E N T
+    mClient = NULL;
+    mClient = new QTcpSocket(this);
+
+    //(^< ............ Matrix
+    Mtx = NULL;
+    Mtx = new SparseMatrix();
+
+    QMessageBox::critical(this,"S T O P","Server has Stopped");
     //close();
 }
 
@@ -151,6 +168,9 @@ void MainWindow::Graph_Matrix(){
     Mtx->DrawMatrix();
 }
 
+//void MainWindow::Matrix_BackUp(){
+
+//}
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
 //(^< ............ ............ ............ ............ ............ Decoding
 //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
@@ -220,9 +240,12 @@ void MainWindow::Iniciado(){
 
 void MainWindow::Apagado(){
 
+    ui->tblRequest_History->setRowCount(0);
+    ui->tboxReply->setText("");
+    ui->tboxRequest->setText("");
     ui->btnServer_Start->setEnabled(true);
     ui->btnServer_Stop->setEnabled(false);
-    ui->btnMatrix_Graph->setEnabled(true);
+    ui->btnMatrix_Graph->setEnabled(false);
     //ui->btnLisent_to_Client->setEnabled(false);
 
     ui->lblStatus->setText("<font color='red'>OFF</font>");

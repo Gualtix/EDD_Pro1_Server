@@ -58,7 +58,6 @@ public:
 
             QString Req = WList->First->Data->Cad;
 
-
             if(Req == "Log_In"){
                 if(Log_In(Mtx)){
                     Static_Storage::Repy_Status = "SUCCESS";
@@ -70,8 +69,6 @@ public:
                 //return "Log_In#ERROR#";
             }
 
-
-
             else if(Req == "Sign_In"){
                 if(Sign_In(Mtx)){
                     Static_Storage::Repy_Status = "SUCCESS";
@@ -82,8 +79,6 @@ public:
                 return "Sign_In#ERROR#Password dont Match with Nickname, Please Try Again...#";
             }
 
-
-
             else if(Req == "Get_User_Files"){
 
                 QString Ans = Get_User_Files(Mtx);
@@ -91,28 +86,38 @@ public:
                 return Ans;
             }
 
-
-
             else if(Req == "Get_File_Content"){
-                QString JSon_URL = WList->GetNode(1)->Data->Cad;
-                QString Ans = Get_File_Content(JSon_URL);
-                if(!Ans.size() == 18){
-                    Static_Storage::Repy_Status = "JSon Content Send";
-                    return Ans;
+
+                QString UserName = WList->GetNode(1)->Data->Cad;
+                QString FileName = WList->GetNode(2)->Data->Cad;
+                QString JSon_URL = WList->GetNode(3)->Data->Cad;
+                QString Ans = Get_File_Content(JSon_URL,FileName,UserName);
+                QString Order = WList->GetNode(4)->Data->Cad;
+                QString Type = WList->GetNode(5)->Data->Cad;
+
+                Ans.append(Order);
+                Ans.append("#");
+
+                Ans.append(Type);
+                Ans.append("#");
+
+
+                if(Ans.size() == 38){
+                    Static_Storage::Repy_Status = "ERROR 404: File not Found";
+
                 }
-                Static_Storage::Repy_Status = "File Requested Not Found";
-                return "Get_User_Files#ERROR#";
+                else{
+                    Static_Storage::Repy_Status = "SUCCESS";
+                }
+
+                return Ans;
             }
-
-
 
             else if(Req == "Get_Available_Users"){
                 QString Ans = Get_Available_Users(Mtx);
                 Static_Storage::Repy_Status = QString::number(Num_Users)+" User(s) Nickname(s) were sent";
                 return Ans;
             }
-
-
 
             else if(Req == "Create_File"){
                 QString FileName = WList->GetNode(2)->Data->Cad;
@@ -136,8 +141,6 @@ public:
                 return "Delete_File#ERROR#File could not be Deleted#";
             }
 
-
-
             else if(Req == "Get_Permission"){
                 QString FileName = WList->GetNode(2)->Data->Cad;
                 QString Ans = Get_Permission(FileName,Mtx);
@@ -145,28 +148,37 @@ public:
 
             }
 
-
             else if(Req == "Update_Permission"){
                 QString FileName = WList->GetNode(2)->Data->Cad;
                 Update_Permission(FileName,Mtx);
                 return "Get_Permission#SUCCESS#File Permision Updated#";
             }
 
-            else if(Req == "Block_File"){
+            else if(Req == "Save_File"){
+
+                QString UsName = WList->GetNode(1)->Data->Cad;
+                QString FlName = WList->GetNode(2)->Data->Cad;
+                QString JSon_URL = WList->GetNode(3)->Data->Cad;
+                QString JSon_Content = WList->GetNode(4)->Data->Cad;
+                Save_File(JSon_URL,JSon_Content);
+                Static_Storage::Repy_Status = "SUCCESS: File "+FlName+" Updated";
+                return "Save_File#SUCCESS#File Content Updated#";
 
             }
 
+            else if(Req == "Block_File"){
 
+            }
 
             else if(Req == "Release_File"){
 
             }
 
-
-
-            else if(Req == "Save_File"){
-
+            else if(Req == "Log_Out"){
+                Static_Storage::Repy_Status = "SUCCES";
+                return "Log_Out#SUCCESS#";
             }
+
         }
 
         return "ERROR#Peticion No Aceptada#";
@@ -175,6 +187,19 @@ public:
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
     //(^< ............ ............ ............ ............ ............ APP
     //(^< ............ ............ ............ ............ ............ ............ ............ ............ ............ ............
+
+    void Save_File(QString JSon_URL,QString JSon_Content){
+        QString Js = JSon_Content;
+        Js.replace("^","#");
+
+        QString Output_JSon_URL = JSon_URL;
+        QFile Fl(Output_JSon_URL);
+        if (Fl.open(QFile::WriteOnly)) {
+            QTextStream stream(&Fl);
+            stream << Js << endl;
+            Fl.close();
+        }
+    }
 
     bool Update_Permission(QString File_Name,SparseMatrix* Mtx){
 
@@ -296,6 +321,7 @@ public:
                 QString US = WList->GetNode(1)->Data->Cad;
                 QString AR = WList->GetNode(2)->Data->Cad;
                 Add_New_Permission(Mtx,US,AR,"dueño");
+                BuildEmptyFile(AR);
                 return true;
             }
 
@@ -309,29 +335,61 @@ public:
                 QString Type = WList->GetNode(cnt+1)->Data->Cad;
 
                 //(^< ............ ............ ............ ............ ............ Dueño Incluido
-                if(User_Name == WList->GetNode(1)->Data->Cad){
-                    Type = "dueño";
-                    TR = User_Name;
-                }
+                //if(User_Name == WList->GetNode(1)->Data->Cad){
+                    //Type = "dueño";
+                    //TR = User_Name;
+                //}
 
-                Add_New_Permission(Mtx,User_Name,Arch_Name,Type);
+                Add_New_Permission(Mtx,User_Name,Arch_Name,Type.toLower());
 
                 cnt++;
                 cnt++;
             }
+
 
             //(^< ............ ............ ............ ............ ............ Dueño NO Incluido
             if(TR == "NOT"){
                 QString US = WList->GetNode(1)->Data->Cad;
                 QString AR = WList->GetNode(2)->Data->Cad;
                 Add_New_Permission(Mtx,US,AR,"dueño");
-                return true;
+                //return true;
             }
+
+
+            //(^< ............ ............ ............ ............ ............ New JSon File
+            //(^< ............ Archive Update
+            BuildEmptyFile(Arch_Name);
+
+            /*
+            QString Js = "Empty";
+
+            QString Output_JSon_URL = "JSon_DIR/"+Arch_Name+".json";
+            QFile Fl(Output_JSon_URL);
+            if (Fl.open(QFile::WriteOnly)) {
+                QTextStream stream(&Fl);
+                stream << Js << endl;
+                Fl.close();
+            }
+            */
 
             return true;
         }
 
         return false;
+    }
+
+    void BuildEmptyFile(QString Arch_Name){
+
+        QString Js = "Empty";
+
+        QString Output_JSon_URL = "JSon_DIR/"+Arch_Name+".json";
+        QFile Fl(Output_JSon_URL);
+        if (Fl.open(QFile::WriteOnly)) {
+            QTextStream stream(&Fl);
+            stream << Js << endl;
+            Fl.close();
+        }
+
     }
 
     void Add_New_Permission(SparseMatrix* Mtx,QString US,QString AR,QString TP){
@@ -367,13 +425,20 @@ public:
                 Us = Us->Next;
                 cnt++;
             }
+            Num_Users = cnt;
         }
 
         return Answer;
     }
 
-    QString Get_File_Content(QString JSon_URL){
+    QString Get_File_Content(QString JSon_URL,QString FileName,QString UserName){
         QString Answer = "Get_File_Content";
+        Answer.append("#");
+
+        Answer.append(FileName);
+        Answer.append("#");
+
+        Answer.append(UserName);
         Answer.append("#");
 
         //(^< ............ User Load
@@ -385,13 +450,21 @@ public:
         QTextStream out(&MyFile);
         QString JSon_Plain_String = out.readAll();
 
-        if(JSon_Plain_String.size() > 0){
+        if(JSon_Plain_String == ""){
             Answer.append("ERROR");
             Answer.append("#");
         }
+        else{
+            Answer.append("SUCCESS");
+            Answer.append("#");
 
-        Answer.append(JSon_Plain_String);
-        Answer.append("#");
+            JSon_Plain_String.chop(1);
+
+            JSon_Plain_String.replace("#","^");
+
+            Answer.append(JSon_Plain_String);
+            Answer.append("#");
+        }
 
         MyFile.close();
 
@@ -496,7 +569,7 @@ public:
             Mtx->LstVertical->EndInsert(USR);
             Mtx->LstVertical->Last->TAG = UsInfo->Name;
             Mtx->LstVertical->Last->NICK = UsInfo->Nickname;
-            Mtx->LstVertical->Last->Data->VrPos = Mtx->LstVertical->ListSize;
+            Mtx->LstVertical->Last->Data->VrPos = Mtx->LstVertical->ListSize - 1;
 
             Static_Storage::Nickname = Nick;
             Mtx->Update_JSon_Users(USR);

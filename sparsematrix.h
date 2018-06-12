@@ -157,6 +157,77 @@ public:
     }
 
     //(^< ............ ............ ............ Actualizar JSon-Archives
+    void Update_JSonArchives(){
+
+        QString Js = "";
+
+        if(LstHorizontal->ListSize > 0){
+            Js.append("[\n");
+
+            int cnt = 0;
+            GeNode<Archive*>* Tmp;
+            while(cnt < LstHorizontal->ListSize){
+                Tmp = LstHorizontal->GetNode(cnt);
+
+                Js.append("\t{\n");
+
+                Js.append("\t\t\"nombre\": \""+Tmp->Data->ArchiveData->Name+"\",\n");
+                Js.append("\t\t\"tipo\": \""+Tmp->Data->ArchiveData->Type+"\",\n");
+                Js.append("\t\t\"creador\": \""+Tmp->Data->ArchiveData->Creator+"\",\n");
+                Js.append("\t\t\"fecha_creacion\": \""+Tmp->Data->ArchiveData->Creation_Date+"\",\n");
+                Js.append("\t\t\"modificador\": \""+Tmp->Data->ArchiveData->Modifier_Nickname+"\",\n");
+                Js.append("\t\t\"fecha_modificacion\": \""+Tmp->Data->ArchiveData->Modification_Date+"\",\n");
+                Js.append("\t\t\"ruta_contenido\": \""+Tmp->Data->ArchiveData->JSon_URL+"\",\n");
+
+                Js.append("\t\t\"permisos\":\n");
+                Js.append("\t\t\[\n");
+                if(Tmp->Data->NuclearList->ListSize > 0){
+                    int dnt = 0;
+                    GeNode<Permission*>* Prm;
+                    while(dnt < Tmp->Data->NuclearList->ListSize){
+                        Prm = Tmp->Data->NuclearList->GetNode(dnt);
+                        Js.append("\t\t\t{\n");
+
+                        Js.append("\t\t\t\t\"usuario\":\""+Prm->Data->PermissionData->USR+"\",\n");
+                        Js.append("\t\t\t\t\"permiso\":\""+Prm->Data->PermissionData->Type+"\"\n");
+
+                        if(dnt == (Tmp->Data->NuclearList->ListSize - 1)){
+                            Js.append("\t\t\t}\n");
+                        }
+                        else{
+                            Js.append("\t\t\t},\n");
+                        }
+                        dnt++;
+                    }
+                }
+                Js.append("\t\t\]\n");
+
+                if(cnt == (LstHorizontal->ListSize - 1)){
+                    Js.append("\t}\n");
+                }
+                else{
+                    Js.append("\t},\n");
+                }
+
+                cnt++;
+            }
+
+            Js.append("]");
+
+        }
+        else{
+            Js.append("Empty");
+        }
+
+        //(^< ............ Archive Update
+        QString Output_JSon_URL = "ARCH_DIR/archivos.json";
+        QFile Fl(Output_JSon_URL);
+        if (Fl.open(QFile::WriteOnly)) {
+            QTextStream stream(&Fl);
+            stream << Js << endl;
+            Fl.close();
+        }
+    }
 
     //(^< ............ ............ ............ Actualizar JSon-Users
     void Update_JSon_Users(User* NewUser){
@@ -484,7 +555,7 @@ public:
             }
 
             else{
-                throw std::invalid_argument( "InsertNode: El Nodo: "+std::to_string(j)+","+std::to_string(i)+" Ya Existe");
+                //throw std::invalid_argument( "InsertNode: El Nodo: "+std::to_string(j)+","+std::to_string(i)+" Ya Existe");
             }
         }
     }
